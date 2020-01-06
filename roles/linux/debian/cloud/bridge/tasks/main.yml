@@ -1,0 +1,40 @@
+#
+# This file is part of the FlossWare family of open source software.
+#
+# FlossWare is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 3
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+#
+---
+#
+# Validate variables...
+#
+- name: Ensure a name is defined
+  fail: msg="Must provide a bridge_name variable!"
+  when: bridge_name == ""
+
+- name: Ensure a name is defined
+  fail: msg="Must provide a bridge_name variable!"
+  when: bridge_name == ""
+
+#
+# Setup bridge...
+#
+- name: Install bridge utils
+  package: name=bridge-utils state=latest
+
+- name: Change ethernet adapter to bridge
+  copy: src=interfaces dest=/etc/network
+
+- name: Define bridge
+  template: src=bridge.j2 dest=/etc/network/interfaces.d/{{ bridge_name }}
