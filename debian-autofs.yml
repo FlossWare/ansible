@@ -17,10 +17,8 @@
 #
 ---
 
-- name: Setup Debian host to run LXDE
+- name: Setup Debian host to run autofs
   hosts: all
 
   roles:
-  - linux/common/desktop/apps
-  - linux/debian/desktop/lxde
   - linux/debian/autofs

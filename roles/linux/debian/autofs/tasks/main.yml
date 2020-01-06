@@ -17,10 +17,20 @@
 #
 ---
 
-- name: Setup Debian host to run LXDE
-  hosts: all
+- name: Install filesystem libraries
+  package:  name={{ item }} state=latest
+  with_items:
+    - autofs
+    - cifs-utils
+    - smbclient
+    - libnfs-utils
 
-  roles:
-  - linux/common/desktop/apps
-  - linux/debian/desktop/lxde
-  - linux/debian/autofs
+- name: Create auto.master
+  template: src=auto.master.j2 dest=/etc/auto.master
+
+- name: Create auto.host files
+  template: src=auto.host.j2 dest="/etc/auto.{{ item.name }}"
+  with_items: "{{ autofs_master }}"
+
+- name: Ensure autofs is running
+  service: name=autofs state=restarted enabled=true
